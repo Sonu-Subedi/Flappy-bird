@@ -72,7 +72,6 @@ function moveBird(e) {
 }
 
 function update() {
-  requestAnimationFrame(update);
   if (gameOver) {
     return;
   }
