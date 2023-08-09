@@ -69,7 +69,6 @@ window.onload = () => {
 };
 
 function update() {
-  requestAnimationFrame(update);
   if (gameOver) {
     return;
   }
