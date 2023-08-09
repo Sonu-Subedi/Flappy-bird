@@ -44,9 +44,6 @@ function gameStart() {
   canvas.width = canvasWidth;
   context = canvas.getContext("2d");
 
-  //   context.fillstyle = "blue";
-  //   context.fillRect(birdImg, bird.x, bird.y, bird.width, bird.height);
-
   birdImg = new Image();
   birdImg.src = "../sprites/bluebird-upflap.png";
   birdImg.onload = function () {
@@ -60,8 +57,10 @@ function gameStart() {
 
   requestAnimationFrame(update);
   setInterval(createPipe, 2500);
-  document.addEventListener("keydown", moveBird);
-  canvas.addEventListener("click", moveBird);
+  document.addEventListener("keydown", function (e) {
+    moveBird(e);
+  });
+
   canvas.addEventListener("click", moveBird);
 }
 
@@ -72,12 +71,12 @@ function moveBird(e) {
 }
 
 function update() {
+  requestAnimationFrame(update);
   if (gameOver) {
     return;
   }
   context.clearRect(0, 0, canvas.width, canvas.height);
   velocityY += gravity;
-  console.log(velocityY);
   bird.y += velocityY;
 
   bird.y = Math.max(bird.y, 0);
@@ -86,9 +85,9 @@ function update() {
   if (bird.y > canvas.height) {
     gameOver = true;
   }
+
   for (let i = 0; i < pipeArray.length; i++) {
     let pipe = pipeArray[i];
-    console.log(pipe);
     pipe.x += velocityX;
     context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
     if (!pipe.passed && bird.x > pipe.x + pipe.width) {
@@ -143,11 +142,13 @@ function createPipe() {
   pipeArray.push(bottomPipe);
 }
 
-canvas.addEventListener("click", () => {
-  if (gameOver) {
-    restartGame();
-  } else {
-    moveBird();
+document.addEventListener("keydown", function (e) {
+  if (e.code === "Space") {
+    if (gameOver) {
+      restartGame();
+    } else {
+      moveBird();
+    }
   }
 });
 
