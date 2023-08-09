@@ -22,21 +22,21 @@ let bird = {
 let pipeArray = [];
 let pipeWidth = 54;
 let pipeHeight = 412;
-let pipeX = canvasWidth / 2;
+let pipeX = canvasWidth;
 let pipeY = 0;
 
 let topImg;
 let bottomImg;
 ////game physics
-let velocityX = -2;
+let velocityX = -1.5;
 let velocityY = 0;
-let gravity = 0.2;
+let gravity = 0.4;
 let gameOver = false;
 
 let score = 0;
 
-gameOverImg = new Image();
-gameOverImg.src = "sprites/gameover.png";
+// gameOverImg = new Image();
+// gameOverImg.src = "sprites/gameover.png";
 
 function gameStart() {
   const canvas = document.getElementById("canvas");
@@ -59,14 +59,17 @@ function gameStart() {
   bottomImg.src = "/sprites/bottompipe.png";
 
   requestAnimationFrame(update);
-  setInterval(createPipe, 1500);
+  setInterval(createPipe, 2500);
   document.addEventListener("keydown", moveBird);
+  canvas.addEventListener("click", moveBird);
   canvas.addEventListener("click", moveBird);
 }
 
-window.onload = () => {
-  gameStart();
-};
+function moveBird(e) {
+  if (e.code == "Space" || e.code == "ArrowUp" || e.type === "click") {
+    velocityY = -4;
+  }
+}
 
 function update() {
   requestAnimationFrame(update);
@@ -75,8 +78,11 @@ function update() {
   }
   context.clearRect(0, 0, canvas.width, canvas.height);
   velocityY += gravity;
+  console.log(velocityY);
   bird.y += velocityY;
-  bird.y = Math.max(bird.y + velocityY, 0);
+
+  bird.y = Math.max(bird.y, 0);
+
   context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
   if (bird.y > canvas.height) {
     gameOver = true;
@@ -109,9 +115,8 @@ function update() {
   }
 }
 function createPipe() {
-  requestAnimationFrame(update);
   if (gameOver) {
-    gameOvertext();
+    // gameOvertext();
     return;
   }
   let randomPipeY = pipeY - pipeHeight / 4 - Math.random() * (pipeHeight / 2);
@@ -139,18 +144,20 @@ function createPipe() {
   pipeArray.push(bottomPipe);
 }
 
-function moveBird(e) {
-  if (e.code == "Space" || e.code == "ArrowUp") {
-    velocityY = -3;
-
-    ///restart game
-    if (gameOver) {
-      bird.y = birdY;
-      pipeArray = [];
-      score = 0;
-      gameOver = false;
-    }
+canvas.addEventListener("click", () => {
+  if (gameOver) {
+    restartGame();
+  } else {
+    moveBird();
   }
+});
+
+function restartGame() {
+  bird.y = birdY;
+  pipeArray = [];
+  score = 0;
+  gameOver = false;
+  velocityY = 0;
 }
 
 // for collision
@@ -166,8 +173,13 @@ function detectCollision(a, b) {
   return false;
 }
 
-function gameOvertext() {
-  context.drawImage(gameOverImg, 5, canvasHeight / 2.9, 350, 70);
-  context.fillText(`Final score: ${score}`, 100, 330);
-  context.fillText(`Click to play again`, 65, 380);
-}
+// function gameOvertext() {
+//   context.drawImage(gameOverImg, 5, canvasHeight / 2.9, 350, 70);
+//   context.fillText(`Final score: ${score}`, 100, 330);
+//   context.fillText(`Click to play again`, 65, 380);
+// }
+
+window.onload = () => {
+  gameStart();
+  canvas.addEventListener("click", moveBird);
+};
