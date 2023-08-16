@@ -28,7 +28,7 @@ let pipeY = 0;
 let topImg;
 let bottomImg;
 ////game physics
-let velocityX = -1.5;
+let velocityX = -1.5; ///pipes moving left
 let velocityY = 0;
 let gravity = 0.4;
 let gameOver = false;
@@ -91,7 +91,7 @@ function update() {
     pipe.x += velocityX;
     context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
     if (!pipe.passed && bird.x > pipe.x + pipe.width) {
-      score += 0.5;
+      score += 1;
       pipe.passed = true;
     }
     if (detectCollision(bird, pipe)) {
