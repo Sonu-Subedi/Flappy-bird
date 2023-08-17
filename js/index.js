@@ -1,6 +1,6 @@
 const container = document.querySelector(".container");
-let canvasWidth = 320;
-let canvasHeight = 540;
+let canvasWidth = 420;
+let canvasHeight = 640;
 let context;
 
 // Declaring bird variables
@@ -25,10 +25,10 @@ let pipeHeight = 412;
 let pipeX = canvasWidth;
 let pipeY = 0;
 
-let topImg;
+let topImg1;
 let bottomImg;
 ////game physics
-let velocityX = -1.5; ///pipes moving left
+let velocityX = -1.5;
 let velocityY = 0;
 let gravity = 0.4;
 let gameOver = false;
@@ -45,15 +45,15 @@ function gameStart() {
   context = canvas.getContext("2d");
 
   birdImg = new Image();
-  birdImg.src = "../sprites/bluebird-upflap.png";
+  birdImg.src = "../assets/bluebird-upflap.png";
   birdImg.onload = function () {
     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
   };
 
   topImg = new Image();
-  topImg.src = "/sprites/toppipe.png";
+  topImg.src = "/assets/toppipe.png";
   bottomImg = new Image();
-  bottomImg.src = "/sprites/bottompipe.png";
+  bottomImg.src = "/assets/bottompipe.png";
 
   requestAnimationFrame(update);
   setInterval(createPipe, 2500);
@@ -91,7 +91,7 @@ function update() {
     pipe.x += velocityX;
     context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
     if (!pipe.passed && bird.x > pipe.x + pipe.width) {
-      score += 1;
+      score += 0.5;
       pipe.passed = true;
     }
     if (detectCollision(bird, pipe)) {
@@ -105,11 +105,11 @@ function update() {
   }
 
   //for displaying score
-  context.fillStyle = "red";
+  context.fillStyle = "green";
   context.font = "40px sans-serif";
   context.fillText(score, 5, 45);
   if (gameOver) {
-    context.fillText("Game Over", 5, 90);
+    context.fillText("Game Over", 110, 320);
   }
 }
 function createPipe() {
