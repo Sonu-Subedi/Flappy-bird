@@ -35,9 +35,6 @@ let gameOver = false;
 
 let score = 0;
 
-// gameOverImg = new Image();
-// gameOverImg.src = "sprites/gameover.png";
-
 function gameStart() {
   const canvas = document.getElementById("canvas");
   canvas.height = canvasHeight;
@@ -45,15 +42,15 @@ function gameStart() {
   context = canvas.getContext("2d");
 
   birdImg = new Image();
-  birdImg.src = "../assets/bluebird-upflap.png";
+  birdImg.src = "assets/bluebird-upflap.png";
   birdImg.onload = function () {
     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
   };
 
   topImg = new Image();
-  topImg.src = "/assets/toppipe.png";
+  topImg.src = "assets/toppipe.png";
   bottomImg = new Image();
-  bottomImg.src = "/assets/bottompipe.png";
+  bottomImg.src = "assets/bottompipe.png";
 
   requestAnimationFrame(update);
   setInterval(createPipe, 2500);
@@ -107,9 +104,13 @@ function update() {
   //for displaying score
   context.fillStyle = "green";
   context.font = "40px sans-serif";
-  context.fillText(score, 5, 45);
+  context.fillText("Score: " + score, 5, 45);
   if (gameOver) {
-    context.fillText("Game Over", 110, 320);
+    const gameOverImage = new Image();
+    gameOverImage.src = "assets/gameover.png";
+    const imageWidth = 200;
+    const imageHeight = 100;
+    context.drawImage(gameOverImage, 110, 220, imageWidth, imageHeight);
   }
 }
 function createPipe() {
@@ -172,12 +173,6 @@ function detectCollision(a, b) {
   }
   return false;
 }
-
-// function gameOvertext() {
-//   context.drawImage(gameOverImg, 5, canvasHeight / 2.9, 350, 70);
-//   context.fillText(`Final score: ${score}`, 100, 330);
-//   context.fillText(`Click to play again`, 65, 380);
-// }
 
 window.onload = () => {
   gameStart();
